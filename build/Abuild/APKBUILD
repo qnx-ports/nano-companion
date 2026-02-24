@@ -1,0 +1,45 @@
+pkgname=nano
+pkgver=8.3
+pkgrel=0
+pkgdesc="Enhanced clone of the Pico text editor"
+url="https://www.nano-editor.org/"
+arch="all"
+license="GPL-3.0-or-later"
+makedepends="ncurses-dev"
+subpackages="$pkgname-doc $pkgname-syntax::noarch"
+source="https://www.nano-editor.org/dist/v${pkgver%%.*}/nano-$pkgver.tar.xz"
+
+build() {
+    ./configure \
+        --build=$CBUILD \
+        --host=$CHOST \
+        --prefix=/usr \
+        --sysconfdir=/etc \
+        --mandir=/usr/share/man \
+        --infodir=/usr/share/info \
+        --localstatedir=/var \
+        --disable-libmagic \
+        --disable-nls
+    make
+}
+
+package() {
+    make DESTDIR="$pkgdir" install
+    install -Dm644 doc/sample.nanorc \
+        "$pkgdir"/etc/nanorc
+
+    # Proper syntax highlighting for APKBUILDs
+    sed -i "/syntax/s/\"$/\" \"APKBUILD&/" \
+        "$pkgdir"/usr/share/nano/sh.nanorc
+}
+
+syntax() {
+    pkgdesc="Syntax highlighting definitions for $pkgname"
+    depends="$pkgname=$pkgver-r$pkgrel"
+
+    amove usr/share/nano
+}
+
+sha512sums="
+9f57bb16a30240fdfc8fc31f5a55f681b80dd72de66fa143ef36c59ab696cc672d8fa054f5a4a547324db3deb2fe2f777cd7c1c023b571e2bb36c86a783ff1d6  nano-8.3.tar.xz
+"
