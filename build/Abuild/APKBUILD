@@ -1,6 +1,6 @@
 pkgname=nano
 pkgver=8.3
-pkgrel=${pkgrel:-0}
+pkgrel=0
 pkgdesc="Enhanced clone of the Pico text editor"
 url="https://www.nano-editor.org/"
 arch="all"
@@ -40,7 +40,6 @@ syntax() {
     amove usr/share/nano
 }
 
-options="$options ${DISABLE_CHECK:+!check}"
 sha512sums="
 9f57bb16a30240fdfc8fc31f5a55f681b80dd72de66fa143ef36c59ab696cc672d8fa054f5a4a547324db3deb2fe2f777cd7c1c023b571e2bb36c86a783ff1d6  nano-8.3.tar.xz
 "
